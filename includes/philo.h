@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:10:06 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/06 21:36:16 by anporced         ###   ########.fr       */
+/*   Updated: 2024/07/07 12:13:40 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,7 @@ int		parse_int(const char *s);
 // Routines
 void	*philosopher_routine(void *arg);
 void	*monitor_routine(void *arg);
-void	take_forks(t_philosopher *philo);
-void	eat(t_philosopher *philo);
-void	print_status(t_philosopher *philo, t_state state);
+void	print_philosopher_status(t_philosopher *philo, t_state state);
 
 // Cleanup
 void	cleanup(t_params *params);

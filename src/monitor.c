@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:44 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/06 17:35:43 by anporced         ###   ########.fr       */
+/*   Updated: 2024/07/07 13:39:37 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	monitor_philosopher(t_params *params, int i)
 	if ((get_timestamp() - params->philosophers[i].last_meal) \
 		> params->time_to_die)
 	{
-		print_status(&params->philosophers[i], DEAD);
+		print_philosopher_status(&params->philosophers[i], DEAD);
 		pthread_mutex_lock(&params->stop_mutex);
 		params->stop = 1;
 		pthread_mutex_unlock(&params->stop_mutex);

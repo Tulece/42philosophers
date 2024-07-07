@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:49 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/07 09:31:51 by anporced         ###   ########.fr       */
+/*   Updated: 2024/07/07 13:50:50 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ void	print_philosopher_status(t_philosopher *philo, t_state state)
 		return ;
 	}
 	pthread_mutex_unlock(&philo->params->stop_mutex);
-	timestamp = get_timestamp();
+	timestamp = get_timestamp() - philo->params->start_time;
 	pthread_mutex_lock(&philo->params->print_mutex);
 	if (!philo->params->stop)
 		printf("%ld %d %s\n", timestamp, philo->id, status[state]);
 	pthread_mutex_unlock(&philo->params->print_mutex);
 }
 
-void philosopher_take_forks(t_philosopher *philo)
+void	philosopher_take_forks(t_philosopher *philo)
 {
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
@@ -67,7 +67,6 @@ void philosopher_take_forks(t_philosopher *philo)
 	pthread_mutex_lock(second_fork);
 	print_philosopher_status(philo, TAKING_FORK);
 }
-
 
 void	philosopher_eat(t_philosopher *philo)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:06:28 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/06 21:57:02 by anporced         ###   ########.fr       */
+/*   Updated: 2024/07/07 13:38:53 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	init_params(t_params *params, int argc, char **argv)
 {
 	if (!parse_arguments(argc, argv, params))
 		return (0);
+	params->start_time = get_timestamp();
 	if (!init_forks(params) || !init_mutexes(params) \
 	|| !init_philosophers(params))
 		return (0);
