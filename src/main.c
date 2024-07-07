@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/06 17:09:59 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/06 21:36:11 by anporced         ###   ########.fr       */
+/*   Created: 2024/07/06 17:09:41 by anporced          #+#    #+#             */
+/*   Updated: 2024/07/06 17:14:46 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-long	get_timestamp(void)
+int	main(int argc, char **argv)
 {
-	struct timeval	tv;
+	t_params	params;
+	pthread_t	monitor_thread;
 
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
-
-void	custom_usleep(int milliseconds)
-{
-	long	start;
-
-	start = get_timestamp();
-	while ((get_timestamp() - start) < milliseconds)
-		usleep(10);
+	if (!init_params(&params, argc, argv))
+		return (EXIT_FAILURE);
+	if (pthread_create(&monitor_thread, NULL, monitor_routine, &params) != 0)
+	{
+		handle_error("Failed to create monitor thread");
+		cleanup(&params);
+		return (EXIT_FAILURE);
+	}
+	pthread_join(monitor_thread, NULL);
+	cleanup(&params);
+	return (EXIT_SUCCESS);
 }
