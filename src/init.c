@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/06 17:06:28 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/07 13:38:53 by tulece           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/philo.h"
 
 int	init_mutexes(t_params *params)
@@ -91,7 +79,7 @@ int	init_params(t_params *params, int argc, char **argv)
 		return (0);
 	params->start_time = get_timestamp();
 	if (!init_forks(params) || !init_mutexes(params) \
-	|| !init_philosophers(params))
+		|| !init_philosophers(params))
 		return (0);
 	return (1);
 }

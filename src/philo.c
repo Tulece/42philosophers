@@ -6,7 +6,7 @@
 /*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:49 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/07 13:50:50 by tulece           ###   ########.fr       */
+/*   Updated: 2024/07/07 22:02:54 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,16 @@ void	print_philosopher_status(t_philosopher *philo, t_state state)
 		"is sleeping",
 		"died"
 	};
+	static const char	*colors[] = {
+		RED,        // Philosopher 1
+		GREEN,      // Philosopher 2
+		YELLOW,     // Philosopher 3
+		BLUE,       // Philosopher 4
+		MAGENTA,    // Philosopher 5
+		CYAN        // Philosopher 6
+	};
 	long				timestamp;
+	const char			*color;
 
 	pthread_mutex_lock(&philo->params->stop_mutex);
 	if (philo->params->stop)
@@ -31,10 +40,37 @@ void	print_philosopher_status(t_philosopher *philo, t_state state)
 	}
 	pthread_mutex_unlock(&philo->params->stop_mutex);
 	timestamp = get_timestamp() - philo->params->start_time;
+	color = colors[philo->id % 6];
 	pthread_mutex_lock(&philo->params->print_mutex);
 	if (!philo->params->stop)
-		printf("%ld %d %s\n", timestamp, philo->id, status[state]);
+		printf("%s%ld %d %s%s\n", color, timestamp, philo->id, status[state], RESET);
 	pthread_mutex_unlock(&philo->params->print_mutex);
+}
+
+void	select_forks(t_philosopher *philo, pthread_mutex_t **first_fork,
+pthread_mutex_t **second_fork)
+{
+	if (philo->params->num_philosophers == 1)
+	{
+		custom_usleep(philo->params->time_to_die);
+		print_philosopher_status(philo, DEAD);
+		pthread_mutex_lock(&philo->params->stop_mutex);
+		philo->params->stop = 1;
+		pthread_mutex_unlock(&philo->params->stop_mutex);
+		*first_fork = NULL;
+		*second_fork = NULL;
+		return ;
+	}
+	if (philo->id % 2 == 0)
+	{
+		*first_fork = philo->right_fork;
+		*second_fork = philo->left_fork;
+	}
+	else
+	{
+		*first_fork = philo->left_fork;
+		*second_fork = philo->right_fork;
+	}
 }
 
 void	philosopher_take_forks(t_philosopher *philo)
@@ -42,30 +78,14 @@ void	philosopher_take_forks(t_philosopher *philo)
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
 
-	if (philo->params->num_philosophers == 1)
+	select_forks(philo, &first_fork, &second_fork);
+	if (first_fork && second_fork)
 	{
-		print_philosopher_status(philo, THINKING);
-		custom_usleep(philo->params->time_to_die);
-		print_philosopher_status(philo, DEAD);
-		pthread_mutex_lock(&philo->params->stop_mutex);
-		philo->params->stop = 1;
-		pthread_mutex_unlock(&philo->params->stop_mutex);
-		return ;
+		pthread_mutex_lock(first_fork);
+		print_philosopher_status(philo, TAKING_FORK);
+		pthread_mutex_lock(second_fork);
+		print_philosopher_status(philo, TAKING_FORK);
 	}
-	if (philo->id % 2 == 0)
-	{
-		first_fork = philo->right_fork;
-		second_fork = philo->left_fork;
-	}
-	else
-	{
-		first_fork = philo->left_fork;
-		second_fork = philo->right_fork;
-	}
-	pthread_mutex_lock(first_fork);
-	print_philosopher_status(philo, TAKING_FORK);
-	pthread_mutex_lock(second_fork);
-	print_philosopher_status(philo, TAKING_FORK);
 }
 
 void	philosopher_eat(t_philosopher *philo)
@@ -88,7 +108,7 @@ void	*philosopher_routine(void *arg)
 	int				should_stop;
 
 	philo = (t_philosopher *)arg;
-	should_stop = philo->params->stop;
+	should_stop = 0;
 	while (!should_stop)
 	{
 		print_philosopher_status(philo, THINKING);

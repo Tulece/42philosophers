@@ -6,7 +6,7 @@
 /*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:46 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/07 14:02:15 by tulece           ###   ########.fr       */
+/*   Updated: 2024/07/07 21:59:42 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int	parse_arguments(int argc, char **argv, t_params *params)
 {
 	if (argc < 5 || argc > 6)
 	{
-		printf("Usage: %s number_of_philos time_to_die time_to_eat "
-			"time_to_sleep [number_of_times_each_philos_must_eat]\n", argv[0]);
+		printf("Usage: %s number_of_philos time_to_die time_to_eat time_to_sleep \
+[number_of_times_each_philos_must_eat]\n", argv[0]);
 		return (0);
 	}
 	if (!read_and_verify_args(argc, argv, params))
