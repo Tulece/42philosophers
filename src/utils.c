@@ -6,7 +6,7 @@
 /*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:10:02 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/06 17:16:38 by anporced         ###   ########.fr       */
+/*   Updated: 2024/07/07 10:57:04 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	cleanup(t_params *params)
 	while (i < params->num_philosophers)
 	{
 		pthread_join(params->philosophers[i].thread, NULL);
-		pthread_mutex_destroy(&params->forks[i]);
+	//	pthread_mutex_destroy(&params->forks[i]);
 		i++;
 	}
 	pthread_mutex_destroy(&params->print_mutex);
