@@ -6,7 +6,7 @@
 /*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:49 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/07 22:02:54 by tulece           ###   ########.fr       */
+/*   Updated: 2024/07/08 09:58:56 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ pthread_mutex_t **second_fork)
 {
 	if (philo->params->num_philosophers == 1)
 	{
+		print_philosopher_status(philo, TAKING_FORK);
 		custom_usleep(philo->params->time_to_die);
 		print_philosopher_status(philo, DEAD);
 		pthread_mutex_lock(&philo->params->stop_mutex);
