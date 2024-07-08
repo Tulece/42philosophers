@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <anporced@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:49 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/08 13:27:51 by anporced         ###   ########.fr       */
+/*   Updated: 2024/07/08 20:56:27 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	print_philosopher_status(t_philosopher *philo, t_state state)
 		return ;
 	}
 	pthread_mutex_unlock(&philo->params->stop_mutex);
-	
+
 	timestamp = get_timestamp() - philo->params->start_time;
 	color = colors[philo->id % 6];
 	pthread_mutex_lock(&philo->params->print_mutex);
@@ -109,6 +109,12 @@ void	philosopher_eat(t_philosopher *philo)
 	pthread_mutex_unlock(philo->left_fork);
 }
 
+void	philosopher_sleep(t_philosopher *philo)
+{
+	print_philosopher_status(philo, SLEEPING);
+	custom_usleep(philo->params->time_to_sleep);
+}
+
 void	*philosopher_routine(void *arg)
 {
 	t_philosopher	*philo;
@@ -118,13 +124,12 @@ void	*philosopher_routine(void *arg)
 	should_stop = 0;
 	while (!should_stop)
 	{
-		print_philosopher_status(philo, THINKING);
 		philosopher_take_forks(philo);
 		if (philo->left_fork == philo->right_fork)
 			break ;
 		philosopher_eat(philo);
-		print_philosopher_status(philo, SLEEPING);
-		custom_usleep(philo->params->time_to_sleep);
+		philosopher_sleep(philo);
+		print_philosopher_status(philo, THINKING);
 		pthread_mutex_lock(&philo->params->stop_mutex);
 		should_stop = philo->params->stop;
 		pthread_mutex_unlock(&philo->params->stop_mutex);

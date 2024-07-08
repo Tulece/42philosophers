@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:44 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/08 10:18:40 by tulece           ###   ########.fr       */
+/*   Updated: 2024/07/08 20:55:29 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 void	monitor_philosopher(t_params *params, int i)
 {
+	long current_time;
+
 	pthread_mutex_lock(&params->death_mutex);
-	pthread_mutex_lock(&params->meal_mutex);  // Ajouté
-	if ((get_timestamp() - params->philosophers[i].last_meal) > params->time_to_die)
+	pthread_mutex_lock(&params->meal_mutex);
+	current_time = get_timestamp();
+	if ((current_time - params->philosophers[i].last_meal) > params->time_to_die)
 	{
 		print_philosopher_status(&params->philosophers[i], DEAD);
 		pthread_mutex_lock(&params->stop_mutex);
@@ -26,7 +29,6 @@ void	monitor_philosopher(t_params *params, int i)
 	pthread_mutex_unlock(&params->meal_mutex);
 	pthread_mutex_unlock(&params->death_mutex);
 }
-
 
 int	monitor_meals(t_params *params)
 {
@@ -46,7 +48,9 @@ int	monitor_meals(t_params *params)
 			pthread_mutex_unlock(&params->meal_mutex);
 		}
 		else
+		{
 			all_philosophers_done = 0;
+		}
 		if (params->stop)
 			break ;
 		i++;
@@ -57,8 +61,7 @@ int	monitor_meals(t_params *params)
 void	check_meals(t_params *params)
 {
 	pthread_mutex_lock(&params->print_mutex);
-	printf("All philosophers have eaten at least %d times.\n", \
-params->max_meals);
+	printf("All philosophers have eaten at least %d times.\n", params->max_meals);
 	pthread_mutex_lock(&params->stop_mutex);
 	params->stop = 1;
 	pthread_mutex_unlock(&params->stop_mutex);
@@ -79,7 +82,7 @@ void	*monitor_routine(void *arg)
 		pthread_mutex_lock(&params->stop_mutex);
 		should_stop = params->stop;
 		pthread_mutex_unlock(&params->stop_mutex);
-		custom_usleep(100);
+		usleep(1000);  // Réduire l'intervalle de sommeil pour des vérifications plus fréquentes
 	}
 	return (NULL);
 }
