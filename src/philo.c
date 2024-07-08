@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anporced <anporced@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:49 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/08 10:20:36 by tulece           ###   ########.fr       */
+/*   Updated: 2024/07/08 13:27:51 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,17 @@ void	print_philosopher_status(t_philosopher *philo, t_state state)
 		return ;
 	}
 	pthread_mutex_unlock(&philo->params->stop_mutex);
+	
 	timestamp = get_timestamp() - philo->params->start_time;
 	color = colors[philo->id % 6];
 	pthread_mutex_lock(&philo->params->print_mutex);
+	pthread_mutex_lock(&philo->params->stop_mutex);
 	if (!philo->params->stop)
 		printf("%s%ld %d %s%s\n", color, timestamp, philo->id, status[state], RESET);
+	pthread_mutex_unlock(&philo->params->stop_mutex);
 	pthread_mutex_unlock(&philo->params->print_mutex);
 }
+
 
 void	select_forks(t_philosopher *philo, pthread_mutex_t **first_fork,
 pthread_mutex_t **second_fork)
