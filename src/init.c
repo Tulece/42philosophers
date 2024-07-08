@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/08 21:28:17 by anporced          #+#    #+#             */
+/*   Updated: 2024/07/08 21:28:24 by anporced         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 int	init_mutexes(t_params *params)
@@ -23,13 +35,15 @@ int	init_forks(t_params *params)
 		handle_error("Failed to allocate memory for forks");
 		return (0);
 	}
-	for (i = 0; i < params->num_philosophers; i++)
+	i = 0;
+	while (i < params->num_philosophers)
 	{
 		if (pthread_mutex_init(&params->forks[i], NULL) != 0)
 		{
 			handle_error("Failed to initialize fork mutex");
 			return (0);
 		}
+		i++;
 	}
 	return (1);
 }
@@ -54,16 +68,19 @@ int	init_philosophers(t_params *params)
 {
 	int	i;
 
-	params->philosophers = malloc(params->num_philosophers * sizeof(t_philosopher));
+	params->philosophers = malloc(params->num_philosophers \
+	* sizeof(t_philosopher));
 	if (!params->philosophers)
 	{
 		handle_error("Failed to allocate memory for philosophers");
 		return (0);
 	}
-	for (i = 0; i < params->num_philosophers; i++)
+	i = 0;
+	while (i < params->num_philosophers)
 	{
 		if (!init_philosopher(&params->philosophers[i], i, params))
 			return (0);
+		i++;
 	}
 	return (1);
 }
@@ -73,7 +90,8 @@ int	init_params(t_params *params, int argc, char **argv)
 	if (!parse_arguments(argc, argv, params))
 		return (0);
 	params->start_time = get_timestamp();
-	if (!init_forks(params) || !init_mutexes(params) || !init_philosophers(params))
+	if (!init_forks(params) || !init_mutexes(params) \
+		|| !init_philosophers(params))
 		return (0);
 	return (1);
 }

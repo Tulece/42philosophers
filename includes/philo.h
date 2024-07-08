@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:10:06 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/08 10:15:11 by tulece           ###   ########.fr       */
+/*   Updated: 2024/07/08 21:46:31 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,8 @@ typedef struct s_philosopher
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	struct s_params	*params;
-	pthread_mutex_t	meal_mutex;
 	pthread_mutex_t	last_meal_mutex;
 }					t_philosopher;
-
 
 typedef struct s_params
 {

@@ -6,7 +6,7 @@
 /*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:44 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/08 20:55:29 by anporced         ###   ########.fr       */
+/*   Updated: 2024/07/08 21:30:07 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 void	monitor_philosopher(t_params *params, int i)
 {
-	long current_time;
+	long	current_time;
 
 	pthread_mutex_lock(&params->death_mutex);
 	pthread_mutex_lock(&params->meal_mutex);
 	current_time = get_timestamp();
-	if ((current_time - params->philosophers[i].last_meal) > params->time_to_die)
+	if ((current_time - params->philosophers[i].last_meal) \
+	> params->time_to_die)
 	{
 		print_philosopher_status(&params->philosophers[i], DEAD);
 		pthread_mutex_lock(&params->stop_mutex);
@@ -61,7 +62,8 @@ int	monitor_meals(t_params *params)
 void	check_meals(t_params *params)
 {
 	pthread_mutex_lock(&params->print_mutex);
-	printf("All philosophers have eaten at least %d times.\n", params->max_meals);
+	printf("All philosophers have eaten at least %d times.\n", \
+	params->max_meals);
 	pthread_mutex_lock(&params->stop_mutex);
 	params->stop = 1;
 	pthread_mutex_unlock(&params->stop_mutex);
@@ -82,7 +84,7 @@ void	*monitor_routine(void *arg)
 		pthread_mutex_lock(&params->stop_mutex);
 		should_stop = params->stop;
 		pthread_mutex_unlock(&params->stop_mutex);
-		usleep(1000);  // Réduire l'intervalle de sommeil pour des vérifications plus fréquentes
+		usleep(100);
 	}
 	return (NULL);
 }
