@@ -6,7 +6,7 @@
 /*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:49 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/08 09:58:56 by tulece           ###   ########.fr       */
+/*   Updated: 2024/07/08 10:20:36 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,11 @@ void	philosopher_take_forks(t_philosopher *philo)
 void	philosopher_eat(t_philosopher *philo)
 {
 	pthread_mutex_lock(&philo->params->death_mutex);
+	pthread_mutex_lock(&philo->params->meal_mutex);
 	philo->last_meal = get_timestamp();
 	print_philosopher_status(philo, EATING);
 	pthread_mutex_unlock(&philo->params->death_mutex);
+	pthread_mutex_unlock(&philo->params->meal_mutex);
 	custom_usleep(philo->params->time_to_eat);
 	pthread_mutex_lock(&philo->params->meal_mutex);
 	philo->meals_eaten++;

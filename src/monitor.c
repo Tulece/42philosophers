@@ -6,7 +6,7 @@
 /*   By: tulece <tulece@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:44 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/07 22:07:06 by tulece           ###   ########.fr       */
+/*   Updated: 2024/07/08 10:18:40 by tulece           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 void	monitor_philosopher(t_params *params, int i)
 {
 	pthread_mutex_lock(&params->death_mutex);
-	if ((get_timestamp() - params->philosophers[i].last_meal) \
-	> params->time_to_die)
+	pthread_mutex_lock(&params->meal_mutex);  // Ajouté
+	if ((get_timestamp() - params->philosophers[i].last_meal) > params->time_to_die)
 	{
 		print_philosopher_status(&params->philosophers[i], DEAD);
 		pthread_mutex_lock(&params->stop_mutex);
 		params->stop = 1;
 		pthread_mutex_unlock(&params->stop_mutex);
 	}
+	pthread_mutex_unlock(&params->meal_mutex);
 	pthread_mutex_unlock(&params->death_mutex);
 }
+
 
 int	monitor_meals(t_params *params)
 {
