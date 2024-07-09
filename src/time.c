@@ -6,7 +6,7 @@
 /*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:09:59 by anporced          #+#    #+#             */
-/*   Updated: 2024/07/06 21:36:11 by anporced         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:14:51 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ void	custom_usleep(int milliseconds)
 
 	start = get_timestamp();
 	while ((get_timestamp() - start) < milliseconds)
-		usleep(10);
+		usleep(500);
 }
